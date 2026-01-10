@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Register Portal Management</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+   body {
+  font-family: Arial, sans-serif;
+  background: linear-gradient(to bottom right, rgba(71, 1, 1, 0.379)), url('bg.jpg') no-repeat center center fixed;
+  background-size: 400px auto;
+  color: white;
+  margin: 0;
+  padding: 0;
+}
+    .header {
+      position: relative;
+      width: 100%;
+    }
+    .logo1 {
+      position: absolute;
+      top: 30px;
+      right: 80px;
+      height: 120px;
+      z-index: 2;
+    }
+.logo-center {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 80px;
+  z-index: 1;
+}
+    .logo2 {
+      width: 40%;
+      height: 110px;
+      object-fit: cover;
+      display: block;
+    }
+    .content {
+      text-align: center;
+      padding: 150px 10px 100px;
+      color:#000;
+      margin-top: -30px;
+    }
+    h1 {
+      font-size: 2rem;
+      margin: 10px 0 30px 0;
+    }
+    .button-container {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 40px;
+    }
+    .btn {
+      background-color: #f31313e4;
+      color: #000;
+      padding: 15px 50px;
+      font-size: 16px;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .btn:hover {
+      background-color: #ddd;
+    }
+    .btn.admin {
+      background-color: #28a745;
+      color: white;
+    }
+    .btn.admin:hover {
+      background-color: #218838;
+    }
+    .social-icons {
+      margin-top: 100px;
+    }
+    .social-icons a {
+      color: white;
+      font-size: 30px;
+      margin: 0 30px;
+      transition: transform 0.3s;
+    }
+    .social-icons a:hover {
+      transform: scale(1.2);
+      color: #ffd700;
+    }
+    /* ✅ Responsive for mobile */
+    @media (max-width: 768px) {
+      .logo1 {
+        height: 60px;
+      }
+      .logo2 {
+        height: 100px;
+      }
+      .content {
+        padding: 60px 10px 40px;
+      }
+      h1 {
+        font-size: 1.4rem;
+      }
+      .btn {
+        padding: 12px 20px;
+        font-size: 14px;
+        width: 100%;
+        max-width: 300px;
+      }
+      .social-icons a {
+        font-size: 24px;
+        margin: 0 10px;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <!-- Header with both logos -->
+  <div class="header">
+    <img src="logo2.png" alt="Logo 2" class="logo2" />
+    <img src="logo-center.png" alt="Center Logo" class="logo-center" />
+    <img src="logo1.png" alt="Logo 1" class="logo1" />
+  </div>
+  <div class="content">
+    <h1>TRAINING TRAINS SOFTWARE TECHNOLOGIES | INTERNSHIP TRAINING</h1>
+    <h1>Welcome to the Register Portal</h1>
+    <div class="button-container">
+      <a href="employee.html" class="btn">Register Employee</a>
+      <a href="inplant.html" class="btn">Register Inplant Student</a>
+      <a href="internship.html" class="btn">Register Internship Student</a>
+      <a href="admin.html" class="btn admin">Admin Dashboard</a>
+    </div>
+    <div class="social-icons">
+      <a href="https://www.instagram.com/trainingtrains/" target="_blank"><i class="fab fa-instagram"></i></a>
+      <a href="https://www.linkedin.com/company/training-trains-academy/" target="_blank"><i class="fab fa-linkedin"></i></a>
+      <a href="https://www.facebook.com/boopathi.kumar.581/" target="_blank"><i class="fab fa-facebook"></i></a>
+    </div>
+  </div>
+  <script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyDTkasAg4TEfd4Q0V1syNfDP1JP3S0IKmo",
+    authDomain: "register-portal-a1e8b.firebaseapp.com",
+    projectId: "register-portal-a1e8b",
+    storageBucket: "register-portal-a1e8b.firebasestorage.app",
+    messagingSenderId: "1027140121743",
+    appId: "1:1027140121743:web:baf7d638496b5127c2ecfa"
+  };
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+</script>
+</body>
+</html>

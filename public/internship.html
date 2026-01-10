@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Internship Registration</title>
+ <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to bottom right, #ff4e50, #f9d423);
+      padding: 40px;
+    }
+    .container {
+      max-width: 520px;
+      margin: auto;
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 25px;
+      color: #333;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      margin-bottom: 6px;
+      font-weight: bold;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    button {
+      width: 100%;
+      margin-top: 25px;
+      padding: 12px;
+      background-color: #28a745;
+      color: white;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #218838;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Internship Registration</h2>
+    <form action="/register-internship" method="POST">
+      <!-- S.No Field (readonly, backend controlled) -->
+<div class="form-group">
+  <label for="sno">S.No</label>
+  <input type="text" id="sno" name="sno" placeholder="Auto-generated" disabled>
+</div>
+
+      <label>Name</label>
+      <input type="text" name="name" required />
+
+      <label>Email</label>
+      <input type="email" name="email" required />
+
+      <label>Phone Number</label>
+      <input type="tel" name="phone" required />
+
+      <label>College Name</label>
+      <input type="text" name="collegeName" required />
+
+      <label>Department</label>
+      <input type="text" name="department" required />
+
+      <label>Passed Out Year</label>
+      <input type="number" name="passedOutYear" required />
+
+      <label>Age</label>
+      <input type="number" name="age" required />
+
+      <label>Course</label>
+      <input type="text" name="course" required />
+
+      <label>Duration</label>
+      <input type="text" name="duration" required />
+
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+</body>
+</html>

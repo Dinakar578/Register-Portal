@@ -1,0 +1,31 @@
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  padding: 50px;
+  background: #f9f9f9;
+}
+
+h1 {
+  margin-bottom: 30px;
+}
+
+.card {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+}
+
+.btn {
+  display: inline-block;
+  padding: 15px 25px;
+  background: #007BFF;
+  color: #fff;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background 0.3s ease;
+}
+
+.btn:hover {
+  background: #0056b3;
+}

@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to right, #3c9dd8, #62d2a2);
+      margin: 0;
+      padding: 0;
+    }
+
+    .login-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .login-box {
+      max-width: 400px;
+      width: 100%;
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+
+    .input-box {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+
+    .btn {
+      background-color: #007bff;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      margin: 10px 0 0;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    .btn:hover {
+      background-color: #0056b3;
+    }
+
+    .eye {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+    }
+
+    .eye-wrapper {
+      position: relative;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 30px;
+    }
+
+    th, td {
+      padding: 10px;
+      border: 1px solid #007bff;
+      text-align: left;
+    }
+
+    th {
+      background-color: #007bff;
+      color: white;
+    }
+
+    .logout-btn {
+      float: right;
+      background-color: #dc3545;
+    }
+
+    .download-btn {
+      background-color: #007BFF;
+      color: white;
+      padding: 10px 16px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+
+    .download-btn:hover {
+      background-color: #0056b3;
+    }
+    @media (max-width: 480px) {
+  .login-box {
+    width: 90%;
+    padding: 20px;
+  }
+
+  .input-box {
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  .btn, .login-btn {
+    font-size: 15px;
+    padding: 10px;
+  }
+
+  .eye {
+    right: 8px;
+  }
+
+  h2 {
+    font-size: 22px;
+  }
+}
+
+  </style>
+</head>
+<body>
+
+  <!-- Login Form -->
+  <div id="login" class="login-container">
+    <div class="login-box">
+      <h2 style="text-align: center;">Admin Login</h2>
+      <label>Username</label><br>
+      <input type="text" id="username" placeholder="Enter username" class="input-box"><br><br>
+
+      <label>Password</label><br>
+      <div class="eye-wrapper">
+        <input type="password" id="password" placeholder="Enter password" class="input-box">
+        <span class="eye" onclick="togglePassword()">👁️</span>
+      </div><br>
+
+      <button class="btn login-btn" onclick="login()">Login</button>
+    </div>
+  </div>
+
+  <!-- Dashboard -->
+  <div id="dashboard" class="hidden" style="padding: 30px;">
+    <h2>Admin Dashboard</h2>
+    <button class="btn logout-btn" onclick="logout()">Logout</button>
+    <div style="text-align: left; margin-bottom: 20px;">
+      <a href="/export-excel" class="download-btn" download>📥 Download All Data as Excel</a>
+    </div>
+
+    <h3>Internship Students</h3>
+    <div id="internships"></div>
+
+    <h3>Inplant Training Students</h3>
+    <div id="inplants"></div>
+
+    <h3>Employees</h3>
+    <div id="employees"></div>
+  </div>
+
+<script>
+  // Toggle visibility of password
+  function togglePassword() {
+    const pw = document.getElementById('password');
+    pw.type = pw.type === 'password' ? 'text' : 'password';
+  }
+
+  // Admin login
+  async function login() {
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value.trim();
+
+    const response = await fetch('/admin-login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`
+    });
+
+    if (response.redirected || response.ok) {
+      document.getElementById('login').classList.add('hidden');
+      document.getElementById('dashboard').classList.remove('hidden');
+      loadData();
+    } else {
+      alert("❌ Invalid username or password.");
+    }
+  }
+
+  // Load all data
+  async function loadData() {
+    await fetchData('/admin/employees', 'employees');
+    await fetchData('/admin/inplants', 'inplants');
+    await fetchData('/admin/internships', 'internships');
+  }
+
+  // Fetch and render data in tables
+  async function fetchData(endpoint, containerId) {
+    try {
+      const res = await fetch(endpoint);
+      const data = await res.json();
+      const container = document.getElementById(containerId);
+
+      if (!Array.isArray(data) || data.length === 0) {
+        container.innerHTML = "<p>No data available.</p>";
+        return;
+      }
+
+      const headingMap = {
+        sno: "S.No",
+        name: "Name",
+        email: "Email",
+        phone: "Phone",
+        age: "Age",
+        jobRole: "Job Role",
+        experience: "Experience",
+        college: "College Name",
+        department: "Department",
+        passedout: "Passed Out Year",
+        course: "Course",
+        duration: "Duration"
+      };
+
+      let html = "<table><tr>";
+      Object.keys(data[0]).forEach(key => {
+        if (key !== "__v" && key !== "_id") {
+          html += `<th>${headingMap[key] || key}</th>`;
+        }
+      });
+      html += "</tr>";
+
+      data.forEach(entry => {
+        html += "<tr>";
+        Object.entries(entry).forEach(([key, value]) => {
+          if (key !== "__v" && key !== "_id") {
+            html += `<td>${value}</td>`;
+          }
+        });
+        html += "</tr>";
+      });
+
+      html += "</table>";
+      container.innerHTML = html;
+
+    } catch (error) {
+      document.getElementById(containerId).innerHTML =
+        `<p style="color:red;">Failed to load ${containerId} data.</p>`;
+    }
+  }
+
+  function logout() {
+    fetch('/logout').then(() => location.reload());
+  }
+</script>
+</body>
+</html>
