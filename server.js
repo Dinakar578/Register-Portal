@@ -5,14 +5,25 @@ const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 const path = require('path');
 const fs = require('fs');
+
 dotenv.config();
 
 const app = express();
+
+// Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static('public'));
+app.use(express.json());
+
+// ✅ serve frontend public folder
+app.use(express.static(path.join(__dirname, 'public')));
+
+// ✅ home route
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
 
 app.use(session({
-  secret: 'mySecret',
+  secret: process.env.SESSION_SECRET || 'mySecret',
   resave: false,
   saveUninitialized: false,
   cookie: {
@@ -22,10 +33,8 @@ app.use(session({
   }
 }));
 
-mongoose.connect('mongodb://localhost:27017/registerPortalDB', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-}).then(() => console.log("✅ MongoDB connected"))
+mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/registerPortalDB')
+  .then(() => console.log("✅ MongoDB connected"))
   .catch(err => console.log("❌ MongoDB error:", err));
 
 // Models
@@ -33,28 +42,11 @@ const getNextSequence = require('./public/utils/getNextSequence');
 const Employee = require('./models/Employee');
 const InplantStudent = require('./models/InplantStudent');
 const InternshipStudent = require('./models/InternshipStudent');
-const express = require("express");
-const path = require("path");
-const app = express();
 
-app.use(express.json());
-
-// ✅ serve frontend public folder
-app.use(express.static(path.join(__dirname, "public")));
-
-// ✅ home route fix
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
-});
-
-// your other routes here...
-
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on ${PORT}`));
 // Excel Export: all-in-one
 const exportAllToExcel = require('./saveAllToExcel');
 
-// Middleware
+// Admin middleware
 function isAdmin(req, res, next) {
   if (req.session.isAdmin) return next();
   return res.redirect('/admin-login.html');
@@ -63,6 +55,7 @@ function isAdmin(req, res, next) {
 // Admin Login
 app.post('/admin-login', (req, res) => {
   const { username, password } = req.body;
+
   if (
     username === process.env.ADMIN_USERNAME &&
     password === process.env.ADMIN_PASSWORD
@@ -135,13 +128,21 @@ app.get('/success/:type', (req, res) => {
   const type = req.params.type;
   res.send(`
     <html>
-      <head><title>Success</title><link rel="stylesheet" href="/style.css"></head>
+      <head>
+        <title>Success</title>
+        <link rel="stylesheet" href="/style.css">
+      </head>
       <body style="text-align:center;padding:50px;">
         <h2>✅ ${type.charAt(0).toUpperCase() + type.slice(1)} registered successfully!</h2>
-        <br><a href="/index.html" class="btn">⬅ Back to Home</a>
+        <br>
+        <a href="/index.html" class="btn">⬅ Back to Home</a>
       </body>
     </html>
   `);
 });
 
-app.listen(4000, () => console.log("🚀 Server running at http://localhost:4000"));
+const PORT = process.env.PORT || 4000;
+
+app.listen(PORT, () => {
+  console.log(`🚀 Server running at http://localhost:${PORT}`);
+});
