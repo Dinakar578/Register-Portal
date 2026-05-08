@@ -33,7 +33,24 @@ const getNextSequence = require('./public/utils/getNextSequence');
 const Employee = require('./models/Employee');
 const InplantStudent = require('./models/InplantStudent');
 const InternshipStudent = require('./models/InternshipStudent');
+const express = require("express");
+const path = require("path");
+const app = express();
 
+app.use(express.json());
+
+// ✅ serve frontend public folder
+app.use(express.static(path.join(__dirname, "public")));
+
+// ✅ home route fix
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
+});
+
+// your other routes here...
+
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on ${PORT}`));
 // Excel Export: all-in-one
 const exportAllToExcel = require('./saveAllToExcel');
 
